@@ -1,0 +1,239 @@
+<div class="partner-list-container p-4">
+    <!-- Header -->
+    <div class="mb-4">
+        <h2 class="text-2xl font-bold text-gray-800 mb-2">Danh sách đối tác</h2>
+        <p class="text-gray-600">Quản lý thông tin đối tác trong hệ thống</p>
+    </div>
+
+    <!-- Advanced Search -->
+    <div class="search-panel bg-white border-1 border-gray-200 border-round p-4 mb-4">
+        <h4 class="text-lg font-semibold mb-3 text-gray-700">
+            <i class="pi pi-search mr-2"></i>
+            Tìm kiếm nâng cao
+        </h4>
+        
+        <div class="grid">
+            <div class="col-12 md:col-4">
+                <label for="searchCode" class="block text-sm font-medium text-gray-700 mb-2">
+                    Mã đối tác
+                </label>
+                <input
+                    id="searchCode"
+                    type="text"
+                    pInputText
+                    placeholder="Nhập mã đối tác..."
+                    [(ngModel)]="searchCode"
+                    class="w-full"
+                />
+            </div>
+            
+            <div class="col-12 md:col-4">
+                <label for="searchName" class="block text-sm font-medium text-gray-700 mb-2">
+                    Tên đối tác
+                </label>
+                <input
+                    id="searchName"
+                    type="text"
+                    pInputText
+                    placeholder="Nhập tên đối tác..."
+                    [(ngModel)]="searchName"
+                    class="w-full"
+                />
+            </div>
+            
+            <div class="col-12 md:col-4">
+                <label for="searchPhone" class="block text-sm font-medium text-gray-700 mb-2">
+                    Số điện thoại
+                </label>
+                <input
+                    id="searchPhone"
+                    type="text"
+                    pInputText
+                    placeholder="Nhập số điện thoại..."
+                    [(ngModel)]="searchPhone"
+                    class="w-full"
+                />
+            </div>
+        </div>
+        
+        <div class="flex justify-content-end mt-3 gap-2">
+            <button
+                pButton
+                type="button"
+                label="Xóa bộ lọc"
+                icon="pi pi-times"
+                class="p-button-outlined p-button-secondary"
+                (click)="clearSearch()"
+            ></button>
+            <button
+                pButton
+                type="button"
+                label="Tìm kiếm"
+                icon="pi pi-search"
+                class="p-button-primary"
+                (click)="onSearch()"
+            ></button>
+        </div>
+    </div>    <!-- Add New Button -->
+    <div class="flex justify-content-end mb-3">
+        <button
+            pButton
+            type="button"
+            label="Thêm đối tác mới"
+            icon="pi pi-plus"
+            class="p-button-primary"
+            (click)="openAddDialog()"        ></button>
+    </div>
+
+    <!-- Partners Table -->
+    <div class="table-container bg-white border-1 border-gray-200 border-round">
+        <p-table 
+            [value]="filteredPartners" 
+            responsiveLayout="scroll" 
+            class="p-datatable-sm"
+            [paginator]="true"
+            [rows]="10"
+            [showCurrentPageReport]="true"
+            currentPageReportTemplate="Hiển thị {first} đến {last} trong tổng số {totalRecords} đối tác"
+            [rowsPerPageOptions]="[5, 10, 20, 50]"
+        >
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 60px; text-align: center;">STT</th>
+                    <th style="width: 120px;">Mã đối tác</th>
+                    <th style="min-width: 200px;">Tên đối tác</th>
+                    <th style="width: 100px; text-align: center;">Số khách</th>
+                    <th style="width: 140px;">Số điện thoại</th>
+                    <th style="min-width: 250px;">Địa chỉ</th>
+                    <th style="width: 180px; text-align: center;">Hành động</th>
+                </tr>
+            </ng-template>
+            
+            <ng-template pTemplate="body" let-partner let-i="rowIndex">
+                <tr>
+                    <!-- STT -->
+                    <td class="text-center">{{ i + 1 }}</td>
+                    
+                    <!-- Mã đối tác -->
+                    <td>
+                        <a 
+                            href="javascript:void(0)" 
+                            class="text-primary cursor-pointer hover:text-primary-600 font-medium"
+                            (click)="viewPartnerDetail(partner)"
+                            pTooltip="Xem chi tiết đối tác"
+                            tooltipPosition="top"
+                        >
+                            #{{ partner.code }}
+                        </a>
+                    </td>
+                    
+                    <!-- Tên đối tác với avatar -->
+                    <td>
+                        <div class="flex align-items-center gap-2">
+                            <p-avatar 
+                                [image]="partner.avatar" 
+                                shape="circle" 
+                                size="normal"
+                                [style]="{'width': '32px', 'height': '32px'}"
+                            ></p-avatar>
+                            <span class="font-medium">{{ partner.name }}</span>
+                        </div>
+                    </td>
+                    
+                    <!-- Số khách -->
+                    <td class="text-center">
+                        <span class="font-semibold text-primary">{{ partner.customerCount }}</span>
+                    </td>
+                    
+                    <!-- Số điện thoại -->
+                    <td>
+                        <span class="font-mono">{{ formatPhoneNumber(partner.phone) }}</span>
+                    </td>
+                    
+                    <!-- Địa chỉ -->
+                    <td>
+                        <span 
+                            [pTooltip]="partner.address"
+                            tooltipPosition="top"
+                            class="block text-overflow-ellipsis overflow-hidden white-space-nowrap max-w-20rem"
+                        >
+                            {{ partner.address }}
+                        </span>
+                    </td>
+                    
+                    <!-- Hành động -->
+                    <td class="text-center">
+                        <div class="flex align-items-center justify-content-center gap-2">
+                            <!-- Xem chi tiết -->
+                            <button
+                                pButton
+                                type="button"
+                                icon="pi pi-eye"
+                                class="p-button-outlined p-button-sm p-button-info"
+                                pTooltip="Xem chi tiết"
+                                tooltipPosition="top"
+                                (click)="viewPartnerDetail(partner)"
+                            ></button>
+                            
+                            <!-- Menu 3 chấm -->
+                            <button
+                                pButton
+                                type="button"
+                                icon="pi pi-ellipsis-v"
+                                class="p-button-outlined p-button-sm p-button-secondary"
+                                pTooltip="Thêm hành động"
+                                tooltipPosition="top"
+                                #menuButton
+                                (click)="menu.toggle($event); onMenuShow(partner)"
+                            ></button>
+                            
+                            <p-menu 
+                                #menu 
+                                [model]="menuItems" 
+                                [popup]="true"
+                                appendTo="body"
+                            ></p-menu>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+            
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="7" class="text-center p-4">
+                        <div class="flex flex-column align-items-center gap-3">
+                            <i class="pi pi-users text-4xl text-gray-400"></i>
+                            <p class="text-gray-600 text-lg">Không tìm thấy đối tác nào</p>
+                            <p class="text-gray-500">Thử thay đổi điều kiện tìm kiếm hoặc thêm đối tác mới</p>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+<!-- Toast Messages -->
+<p-toast></p-toast>
+
+<!-- Add Partner Dialog -->
+<app-add-partner-dialog
+    [(visible)]="showAddDialog"
+    (partnerAdded)="onPartnerAdded()"
+></app-add-partner-dialog>
+
+<!-- Edit Partner Dialog -->
+<app-edit-partner-dialog
+    [(display)]="showEditDialog"
+    [partner]="selectedPartnerForEdit"
+    (partnerUpdated)="onPartnerUpdated()"
+></app-edit-partner-dialog>
+
+<!-- Delete Partner Dialog -->
+<app-delete-partner-dialog
+    [display]="showDeleteDialog"
+    [partner]="selectedPartnerForDelete"
+    [isDeleting]="isDeleting"
+    (deleteConfirmed)="onDeleteConfirmed()"
+    (deleteCancelled)="onDeleteCancelled()"
+></app-delete-partner-dialog>

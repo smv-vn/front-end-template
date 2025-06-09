@@ -1,1 +1,30 @@
-<router-outlet />
+<div class="app-container">
+    <!-- Navigation -->
+    <nav class="navbar bg-primary-600 p-3 shadow-2">
+        <div class="flex justify-content-between align-items-center w-full">
+            <h1 class="text-white text-xl font-bold m-0">
+                <i class="pi pi-building mr-2"></i>
+                Quản lý đối tác
+            </h1>
+            <div class="flex gap-3">
+                <a routerLink="/partners" 
+                   routerLinkActive="active"
+                   class="nav-link text-white no-underline px-3 py-2 border-round hover:bg-primary-500">
+                    <i class="pi pi-users mr-2"></i>
+                    Đối tác
+                </a>
+                <a routerLink="/demo" 
+                   routerLinkActive="active"
+                   class="nav-link text-white no-underline px-3 py-2 border-round hover:bg-primary-500">
+                    <i class="pi pi-file mr-2"></i>
+                    Demo
+                </a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main content -->
+    <main class="main-content">
+        <router-outlet />
+    </main>
+</div>
