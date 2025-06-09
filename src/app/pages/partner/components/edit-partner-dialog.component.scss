@@ -1,0 +1,44 @@
+:host ::ng-deep {
+    .p-error {
+        color: #e24c4c;
+        font-size: 0.875rem;
+    }
+
+    .p-inputtext,
+    .p-inputtextarea {
+        &.ng-invalid.ng-dirty {
+            border-color: #e24c4c;
+        }
+    }
+
+    .p-fileupload {
+        .p-button {
+            &.p-button-outlined {
+                border-color: var(--primary-color);
+                color: var(--primary-color);
+            }
+        }
+    }
+
+    .p-avatar {
+        .p-avatar-image {
+            object-fit: cover;
+        }
+    }
+
+    .text-red-500 {
+        color: #ef4444;
+    }
+
+    .border-2 {
+        border-width: 2px;
+    }
+
+    .border-300 {
+        border-color: var(--surface-300);
+    }
+
+    .border-top-1 {
+        border-top-width: 1px;
+    }
+}
