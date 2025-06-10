@@ -1,0 +1,370 @@
+/* Demo Component Styles */
+.demo-container {
+    margin: 20px;
+    padding: 20px;
+}
+
+.search-panel {
+    background: #ffffff;
+    border: 1px solid #e1e5e9;
+    border-radius: 6px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.search-panel h3 {
+    margin: 0 0 15px 0;
+    color: #333;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.search-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: end;
+}
+
+.search-field {
+    display: flex;
+    flex-direction: column;
+    min-width: 200px;
+    flex: 1;
+}
+
+.search-field label {
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #555;
+    font-size: 13px;
+}
+
+.search-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.data-table-container {
+    background: #ffffff;
+    border: 1px solid #e1e5e9;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.table-header {
+    padding: 20px;
+    border-bottom: 1px solid #e1e5e9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.table-header h2 {
+    margin: 0;
+    color: #333;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.table-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* Custom table styles */
+:host ::ng-deep .p-datatable {
+    border: none;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-thead>tr>th {
+    background: #f8f9fa;
+    border: none;
+    border-bottom: 2px solid #e1e5e9;
+    padding: 12px;
+    font-weight: 600;
+    color: #495057;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody>tr>td {
+    padding: 12px;
+    border: none;
+    border-bottom: 1px solid #f1f3f4;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody>tr:hover {
+    background: #f8f9fa;
+}
+
+/* Status tag styles */
+:host ::ng-deep .p-tag {
+    font-size: 11px;
+    padding: 4px 8px;
+    font-weight: 600;
+    border-radius: 4px;
+}
+
+:host ::ng-deep .p-tag.p-tag-success {
+    background: #d1edff;
+    color: #0066cc;
+}
+
+:host ::ng-deep .p-tag.p-tag-info {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+:host ::ng-deep .p-tag.p-tag-warning {
+    background: #fff3cd;
+    color: #856404;
+}
+
+:host ::ng-deep .p-tag.p-tag-danger {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+:host ::ng-deep .p-tag.p-tag-secondary {
+    background: #e2e3e5;
+    color: #41464b;
+}
+
+/* Action column styles */
+.action-column {
+    text-align: center;
+    width: 80px;
+}
+
+.record-code {
+    font-weight: 600;
+    color: #007bff;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.record-code:hover {
+    text-decoration: underline;
+}
+
+/* Menu button styles */
+:host ::ng-deep .p-button.action-menu-btn {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    background: transparent;
+    border: 1px solid #dee2e6;
+    color: #6c757d;
+}
+
+:host ::ng-deep .p-button.action-menu-btn:hover {
+    background: #f8f9fa;
+    border-color: #adb5bd;
+    color: #495057;
+}
+
+:host ::ng-deep .p-button.action-menu-btn:focus {
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Pagination styles */
+:host ::ng-deep .p-paginator {
+    border: none;
+    border-top: 1px solid #e1e5e9;
+    background: #f8f9fa;
+    padding: 12px 20px;
+}
+
+/* Clear filter button styling */
+:host ::ng-deep .p-button.p-button-outlined.p-button-warning {
+    background: #fff8dc;
+    border-color: #fbbf24;
+    color: #92400e;
+}
+
+:host ::ng-deep .p-button.p-button-outlined.p-button-warning:hover {
+    background: #fef3c7;
+    border-color: #f59e0b;
+    color: #78350f;
+}
+
+:host ::ng-deep .p-button.p-button-outlined.p-button-warning:focus {
+    box-shadow: 0 0 0 0.2rem rgba(251, 191, 36, 0.25);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .demo-container {
+        margin: 10px;
+        padding: 15px;
+    }
+
+    .search-form {
+        flex-direction: column;
+    }
+
+    .search-field {
+        min-width: auto;
+        width: 100%;
+    }
+
+    .search-buttons {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .table-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+
+    .table-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+}
+
+@media (max-width: 480px) {
+    .search-buttons {
+        flex-direction: column;
+    }
+
+    .table-actions {
+        flex-direction: column;
+    }
+}
+
+/* Loading and empty states */
+.loading-indicator {
+    text-align: center;
+    padding: 40px;
+    color: #6c757d;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #6c757d;
+}
+
+.empty-state .pi {
+    font-size: 48px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+/* Button styles */
+:host ::ng-deep .p-button.p-button-primary {
+    background: #007bff;
+    border-color: #007bff;
+}
+
+:host ::ng-deep .p-button.p-button-primary:hover {
+    background: #0056b3;
+    border-color: #0056b3;
+}
+
+:host ::ng-deep .p-button.p-button-secondary {
+    background: #6c757d;
+    border-color: #6c757d;
+}
+
+:host ::ng-deep .p-button.p-button-secondary:hover {
+    background: #545b62;
+    border-color: #545b62;
+}
+
+/* Input styles */
+:host ::ng-deep .p-inputtext {
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    padding: 8px 12px;
+}
+
+:host ::ng-deep .p-inputtext:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+:host ::ng-deep .p-dropdown {
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+:host ::ng-deep .p-dropdown:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Dialog form styles */
+:host ::ng-deep .p-dialog .field {
+    margin-bottom: 1rem;
+}
+
+:host ::ng-deep .p-dialog .field label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+:host ::ng-deep .p-dialog .p-error {
+    font-size: 0.875rem;
+    color: #dc3545;
+    margin-top: 0.25rem;
+    display: block;
+}
+
+:host ::ng-deep .p-dialog .p-calendar {
+    width: 100%;
+}
+
+:host ::ng-deep .p-dialog .p-dropdown {
+    width: 100%;
+}
+
+/* Form validation styles */
+:host ::ng-deep .p-inputtext.ng-invalid.ng-touched,
+:host ::ng-deep .p-dropdown.ng-invalid.ng-touched .p-dropdown-trigger,
+:host ::ng-deep .p-calendar.ng-invalid.ng-touched .p-inputtext {
+    border-color: #dc3545;
+}
+
+:host ::ng-deep .p-inputtext.ng-valid.ng-touched,
+:host ::ng-deep .p-dropdown.ng-valid.ng-touched .p-dropdown-trigger,
+:host ::ng-deep .p-calendar.ng-valid.ng-touched .p-inputtext {
+    border-color: #28a745;
+}
+
+/* Dialog footer styles */
+:host ::ng-deep .p-dialog-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+/* Delete dialog styles */
+:host ::ng-deep .p-dialog .text-center {
+    text-align: center;
+}
+
+:host ::ng-deep .p-dialog .text-red-500 {
+    color: #dc3545;
+}
+
+:host ::ng-deep .p-dialog .text-6xl {
+    font-size: 3.75rem;
+}
+
+:host ::ng-deep .p-dialog .mb-3 {
+    margin-bottom: 1rem;
+}
+
+:host ::ng-deep .p-dialog .mb-0 {
+    margin-bottom: 0;
+}
+
+:host ::ng-deep .p-dialog .mt-3 {
+    margin-top: 1rem;
+}

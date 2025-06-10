@@ -1,0 +1,67 @@
+.add-demo-dialog .p-dialog-content {
+    padding: 1.5rem;
+}
+
+.add-demo-dialog .p-dialog-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+.add-demo-dialog .p-field {
+    margin-bottom: 1rem;
+}
+
+.add-demo-dialog .p-error {
+    font-size: 0.875rem;
+    color: #dc2626;
+}
+
+.add-demo-dialog .p-inputtext.ng-invalid.ng-touched,
+.add-demo-dialog .p-dropdown.ng-invalid.ng-touched,
+.add-demo-dialog .p-calendar.ng-invalid.ng-touched {
+    border-color: #dc2626;
+}
+
+.add-demo-dialog .p-inputtextarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.add-demo-dialog .required-asterisk {
+    color: #dc2626;
+    margin-left: 4px;
+}
+
+.add-demo-dialog .form-field {
+    margin-bottom: 1.25rem;
+}
+
+.add-demo-dialog .form-field label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #374151;
+}
+
+.add-demo-dialog .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.add-demo-dialog .p-button {
+    min-width: 100px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .add-demo-dialog .p-dialog {
+        width: 95vw !important;
+        margin: 0;
+    }
+
+    .add-demo-dialog .grid .col-md-6 {
+        width: 100%;
+    }
+}

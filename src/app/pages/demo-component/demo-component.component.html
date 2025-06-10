@@ -1,93 +1,350 @@
-<div class="border-1 p-3">
-    <div class="flex justify-content-between flex-wrap mb-5">
-        <!-- Tìm kiếm -->
-        <div class="flex align-items-center justify-content-center">
-            <label for="searchInput" class="p-d-block p-mb-1 mr-3">Tìm kiếm</label>
-            <input
-                id="searchInput"
-                type="text"
-                pInputText
-                placeholder="Nhập mã biên bản"
-                [(ngModel)]="searchText"
-            />
-        </div>
+<div class="demo-container p-4">
+    <!-- Header -->
+    <div class="mb-4">
+        <h2 class="text-2xl font-bold text-gray-800 mb-2">Quản lý biên bản</h2>
+        <p class="text-gray-600">Quản lý danh sách biên bản trong hệ thống</p>
+    </div>
 
-        <!-- Lọc trạng thái -->
-        <div class="flex align-items-center justify-content-center">
-            <label for="statusDropdown" class="p-d-block p-mb-1 mr-3"
-                >Lọc trạng thái</label
-            >
-            <p-dropdown
-                inputId="statusDropdown"
-                [options]="statusOptions"
-                [(ngModel)]="selectedStatus"
-                optionLabel="label"
-                placeholder="Chọn"
-            ></p-dropdown>
-        </div>
-
-        <!-- Thêm mới -->
-        <div class="flex align-items-center justify-content-center">
-            <div>
-                <button
-                    pButton
-                    type="button"
-                    label="+ Thêm mới"
-                    class="p-button-primary"
-                ></button>
+    <!-- Search and Filter Panel -->
+    <div class="search-panel bg-white border-1 border-gray-200 border-round p-4 mb-4">
+        <h4 class="text-lg font-semibold mb-3 text-gray-700">
+            <i class="pi pi-search mr-2"></i>
+            Tìm kiếm và lọc
+        </h4>
+        
+        <div class="grid">
+            <div class="col-12 md:col-4">
+                <label for="searchInput" class="block text-sm font-medium text-gray-700 mb-2">
+                    Tìm kiếm
+                </label>
+                <input
+                    id="searchInput"
+                    type="text"
+                    pInputText
+                    placeholder="Nhập mã biên bản, đơn vị..."
+                    [(ngModel)]="searchText"
+                    class="w-full"
+                />
+            </div>
+            
+            <div class="col-12 md:col-4">
+                <label for="statusDropdown" class="block text-sm font-medium text-gray-700 mb-2">
+                    Lọc trạng thái
+                </label>
+                <p-dropdown
+                    id="statusDropdown"
+                    [options]="statusOptions"
+                    [(ngModel)]="selectedStatus"
+                    optionLabel="label"
+                    placeholder="Chọn trạng thái"
+                    class="w-full"
+                ></p-dropdown>
+            </div>
+            
+            <div class="col-12 md:col-4 flex align-items-end">
+                <div class="flex gap-2 w-full">
+                    <button
+                        pButton
+                        type="button"
+                        label="Tìm kiếm"
+                        icon="pi pi-search"
+                        class="p-button-primary flex-1"
+                        (click)="onSearch()"
+                    ></button>                    <button
+                        pButton
+                        type="button"
+                        label="Xóa bộ lọc"
+                        icon="pi pi-times"
+                        class="p-button-outlined p-button-warning flex-1"
+                        (click)="clearSearch()"
+                    ></button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Bảng -->
-    <p-table [value]="records" responsiveLayout="scroll" class="p-datatable-sm">
-        <ng-template pTemplate="header">
-            <tr>
-                <th>STT</th>
-                <th>Mã biên bản</th>
-                <th>Đơn vị</th>
-                <th>Số nhân viên</th>
-                <th>Thời gian có hiệu lực</th>
-                <th>Thời gian hết hiệu lực</th>
-                <th>Trạng thái của biên bản</th>
-                <th>Hành động</th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-record let-i="rowIndex">
-            <tr>
-                <td>{{ i + 1 }}</td>
-                <td>
-                    <a href="#" class="text-primary">#{{ record.code }}</a>
-                </td>
-                <td>{{ record.unit }}</td>
-                <td>{{ record.staffCount }}</td>
-                <td>{{ record.startTime }}</td>
-                <td>{{ record.endTime }}</td>
-                <td>
-                    <span [ngClass]="['p-tag', getStatusClass(record.status)]">
-                        {{ record.status }}
-                    </span>
-                </td>
-                <td>
-                    <p-button
-                        type="button"
-                        label="Xóa"
-                        class="mr-3"
-                        severity="secondary"
-                        [outlined]="true"
-                        [disabled]="
-                            record.status === 'Đã ký' ||
-                            record.status === 'Đã đóng'
-                        "
-                    ></p-button>
-                    <button
-                        pButton
-                        type="button"
-                        label="Sửa"
-                        [disabled]="record.status === 'Đã đóng'"
-                    ></button>
-                </td>
-            </tr>
-        </ng-template>
-    </p-table>
+    <!-- Add New Button -->
+    <div class="flex justify-content-end mb-3">
+        <button
+            pButton
+            type="button"
+            label="Thêm biên bản mới"
+            icon="pi pi-plus"
+            class="p-button-primary"
+            (click)="openAddDialog()"
+        ></button>
+    </div>
+
+    <!-- Table -->
+    <div class="table-container bg-white border-1 border-gray-200 border-round">
+        <p-table 
+            [value]="filteredRecords" 
+            responsiveLayout="scroll" 
+            class="p-datatable-sm"
+            [paginator]="true"
+            [rows]="10"
+            [showCurrentPageReport]="true"
+            currentPageReportTemplate="Hiển thị {first} đến {last} trong tổng số {totalRecords} biên bản"
+            [rowsPerPageOptions]="[5, 10, 20, 50]"
+        >
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 60px; text-align: center;">STT</th>
+                    <th style="width: 140px;">Mã biên bản</th>
+                    <th style="min-width: 150px;">Đơn vị</th>
+                    <th style="width: 100px; text-align: center;">Số nhân viên</th>
+                    <th style="min-width: 180px;">Thời gian có hiệu lực</th>
+                    <th style="min-width: 180px;">Thời gian hết hiệu lực</th>
+                    <th style="width: 150px; text-align: center;">Trạng thái</th>
+                    <th style="width: 200px; text-align: center;">Hành động</th>
+                </tr>
+            </ng-template>
+            
+            <ng-template pTemplate="body" let-record let-i="rowIndex">
+                <tr>
+                    <!-- STT -->
+                    <td class="text-center">{{ i + 1 }}</td>
+                    
+                    <!-- Mã biên bản -->
+                    <td>
+                        <a 
+                            href="javascript:void(0)" 
+                            class="text-primary cursor-pointer hover:text-primary-600 font-medium"
+                            (click)="viewRecordDetail(record)"
+                            pTooltip="Xem chi tiết biên bản"
+                            tooltipPosition="top"
+                        >
+                            #{{ record.code }}
+                        </a>
+                    </td>
+                    
+                    <!-- Đơn vị -->
+                    <td>
+                        <span class="font-medium">{{ record.unit }}</span>
+                    </td>
+                    
+                    <!-- Số nhân viên -->
+                    <td class="text-center">
+                        <span class="font-semibold text-primary">{{ record.staffCount }}</span>
+                    </td>
+                    
+                    <!-- Thời gian bắt đầu -->
+                    <td>
+                        <span class="font-mono text-sm">{{ record.startTime }}</span>
+                    </td>
+                    
+                    <!-- Thời gian kết thúc -->
+                    <td>
+                        <span class="font-mono text-sm">{{ record.endTime }}</span>
+                    </td>
+                    
+                    <!-- Trạng thái -->
+                    <td class="text-center">
+                        <span [ngClass]="['p-tag', getStatusClass(record.status)]">
+                            {{ record.status }}
+                        </span>
+                    </td>
+                    
+                    <!-- Hành động -->
+                    <td class="text-center">
+                        <div class="flex align-items-center justify-content-center gap-2">
+                            <!-- Xem chi tiết -->
+                            <button
+                                pButton
+                                type="button"
+                                icon="pi pi-eye"
+                                class="p-button-outlined p-button-sm p-button-info"
+                                pTooltip="Xem chi tiết"
+                                tooltipPosition="top"
+                                (click)="viewRecordDetail(record)"
+                            ></button>
+                            
+                            <!-- Sửa -->
+                            <button
+                                pButton
+                                type="button"
+                                icon="pi pi-pencil"
+                                class="p-button-outlined p-button-sm p-button-warning"
+                                pTooltip="Chỉnh sửa"
+                                tooltipPosition="top"
+                                [disabled]="record.status === 'Đã đóng'"
+                                (click)="onMenuShow(record); editRecord()"
+                            ></button>
+                            
+                            <!-- Xóa -->
+                            <button
+                                pButton
+                                type="button"
+                                icon="pi pi-trash"
+                                class="p-button-outlined p-button-sm p-button-danger"
+                                pTooltip="Xóa"
+                                tooltipPosition="top"
+                                [disabled]="record.status === 'Đã ký' || record.status === 'Đã đóng'"
+                                (click)="onMenuShow(record); confirmDelete()"
+                            ></button>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+            
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="8" class="text-center p-4">
+                        <div class="flex flex-column align-items-center gap-3">
+                            <i class="pi pi-file-o text-4xl text-gray-400"></i>
+                            <p class="text-gray-600 text-lg">Không tìm thấy biên bản nào</p>
+                            <p class="text-gray-500">Thử thay đổi điều kiện tìm kiếm hoặc thêm biên bản mới</p>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
 </div>
+
+<!-- Toast Messages -->
+<p-toast></p-toast>
+
+<!-- Add Demo Dialog -->
+<p-dialog header="Thêm biên bản mới" [(visible)]="showAddDialog" [modal]="true" [style]="{width: '600px'}" [closable]="true">
+    <form [formGroup]="addForm" (ngSubmit)="onAddSubmit()">
+        <div class="field">
+            <label for="add-code">Mã biên bản *</label>
+            <input pInputText id="add-code" formControlName="code" class="w-full" />
+            <small class="p-error" *ngIf="addForm.get('code')?.invalid && addForm.get('code')?.touched">
+                Mã biên bản là bắt buộc và tối thiểu 3 ký tự
+            </small>
+        </div>
+        
+        <div class="field">
+            <label for="add-unit">Đơn vị *</label>
+            <input pInputText id="add-unit" formControlName="unit" class="w-full" />
+            <small class="p-error" *ngIf="addForm.get('unit')?.invalid && addForm.get('unit')?.touched">
+                Đơn vị là bắt buộc
+            </small>
+        </div>
+        
+        <div class="field">
+            <label for="add-staffCount">Số nhân viên *</label>
+            <input pInputText id="add-staffCount" formControlName="staffCount" type="number" class="w-full" />
+            <small class="p-error" *ngIf="addForm.get('staffCount')?.invalid && addForm.get('staffCount')?.touched">
+                Số nhân viên là bắt buộc và phải lớn hơn 0
+            </small>
+        </div>
+        
+        <div class="field">
+            <label for="add-startTime">Thời gian bắt đầu *</label>
+            <p-calendar id="add-startTime" formControlName="startTime" [showTime]="true" [showIcon]="true" class="w-full"></p-calendar>
+            <small class="p-error" *ngIf="addForm.get('startTime')?.invalid && addForm.get('startTime')?.touched">
+                Thời gian bắt đầu là bắt buộc
+            </small>
+        </div>
+        
+        <div class="field">
+            <label for="add-endTime">Thời gian kết thúc *</label>
+            <p-calendar id="add-endTime" formControlName="endTime" [showTime]="true" [showIcon]="true" class="w-full"></p-calendar>
+            <small class="p-error" *ngIf="addForm.get('endTime')?.invalid && addForm.get('endTime')?.touched">
+                Thời gian kết thúc là bắt buộc
+            </small>
+        </div>
+        
+        <div class="field">
+            <label for="add-status">Trạng thái *</label>
+            <p-dropdown id="add-status" formControlName="status" [options]="statusOptions.slice(1)" optionLabel="label" optionValue="value" class="w-full"></p-dropdown>
+            <small class="p-error" *ngIf="addForm.get('status')?.invalid && addForm.get('status')?.touched">
+                Trạng thái là bắt buộc
+            </small>
+        </div>
+        
+        <div class="field">
+            <label for="add-description">Mô tả</label>
+            <textarea pInputTextarea id="add-description" formControlName="description" rows="3" class="w-full"></textarea>
+        </div>
+    </form>
+    
+    <ng-template pTemplate="footer">
+        <button pButton type="button" label="Hủy" class="p-button-outlined" (click)="showAddDialog = false"></button>
+        <button pButton type="button" label="Thêm" class="p-button-primary" (click)="onAddSubmit()" [disabled]="addForm.invalid || isSubmitting"></button>
+    </ng-template>
+</p-dialog>
+
+<!-- Edit Demo Dialog -->
+<p-dialog header="Chỉnh sửa biên bản" [(visible)]="showEditDialog" [modal]="true" [style]="{width: '600px'}" [closable]="true">
+    <form [formGroup]="editForm" (ngSubmit)="onEditSubmit()">
+        <div class="field">
+            <label for="edit-code">Mã biên bản *</label>
+            <input pInputText id="edit-code" formControlName="code" class="w-full" />
+            <small class="p-error" *ngIf="editForm.get('code')?.invalid && editForm.get('code')?.touched">
+                Mã biên bản là bắt buộc và tối thiểu 3 ký tự
+            </small>
+        </div>
+        
+        <div class="field">
+            <label for="edit-unit">Đơn vị *</label>
+            <input pInputText id="edit-unit" formControlName="unit" class="w-full" />
+            <small class="p-error" *ngIf="editForm.get('unit')?.invalid && editForm.get('unit')?.touched">
+                Đơn vị là bắt buộc
+            </small>
+        </div>
+        
+        <div class="field">
+            <label for="edit-staffCount">Số nhân viên *</label>
+            <input pInputText id="edit-staffCount" formControlName="staffCount" type="number" class="w-full" />
+            <small class="p-error" *ngIf="editForm.get('staffCount')?.invalid && editForm.get('staffCount')?.touched">
+                Số nhân viên là bắt buộc và phải lớn hơn 0
+            </small>
+        </div>
+        
+        <div class="field">
+            <label for="edit-startTime">Thời gian bắt đầu *</label>
+            <p-calendar id="edit-startTime" formControlName="startTime" [showTime]="true" [showIcon]="true" class="w-full"></p-calendar>
+            <small class="p-error" *ngIf="editForm.get('startTime')?.invalid && editForm.get('startTime')?.touched">
+                Thời gian bắt đầu là bắt buộc
+            </small>
+        </div>
+        
+        <div class="field">
+            <label for="edit-endTime">Thời gian kết thúc *</label>
+            <p-calendar id="edit-endTime" formControlName="endTime" [showTime]="true" [showIcon]="true" class="w-full"></p-calendar>
+            <small class="p-error" *ngIf="editForm.get('endTime')?.invalid && editForm.get('endTime')?.touched">
+                Thời gian kết thúc là bắt buộc
+            </small>
+        </div>
+        
+        <div class="field">
+            <label for="edit-status">Trạng thái *</label>
+            <p-dropdown id="edit-status" formControlName="status" [options]="statusOptions.slice(1)" optionLabel="label" optionValue="value" class="w-full"></p-dropdown>
+            <small class="p-error" *ngIf="editForm.get('status')?.invalid && editForm.get('status')?.touched">
+                Trạng thái là bắt buộc
+            </small>
+        </div>
+        
+        <div class="field">
+            <label for="edit-description">Mô tả</label>
+            <textarea pInputTextarea id="edit-description" formControlName="description" rows="3" class="w-full"></textarea>
+        </div>
+    </form>
+    
+    <ng-template pTemplate="footer">
+        <button pButton type="button" label="Hủy" class="p-button-outlined" (click)="showEditDialog = false"></button>
+        <button pButton type="button" label="Cập nhật" class="p-button-primary" (click)="onEditSubmit()" [disabled]="editForm.invalid || isSubmitting"></button>
+    </ng-template>
+</p-dialog>
+
+<!-- Delete Demo Dialog -->
+<p-dialog header="Xác nhận xóa" [(visible)]="showDeleteDialog" [modal]="true" [style]="{width: '400px'}" [closable]="true">
+    <div class="text-center" *ngIf="selectedRecordForDelete">
+        <i class="pi pi-exclamation-triangle text-6xl text-red-500 mb-3"></i>
+        <h3 class="mb-3">Bạn có chắc chắn muốn xóa?</h3>
+        <p class="mb-0">Biên bản: <strong>{{ selectedRecordForDelete.code }}</strong></p>
+        <p class="mb-0">Đơn vị: <strong>{{ selectedRecordForDelete.unit }}</strong></p>
+        <p class="text-red-500 mt-3">Thao tác này không thể hoàn tác!</p>
+    </div>
+    
+    <ng-template pTemplate="footer">
+        <button pButton type="button" label="Hủy" class="p-button-outlined" (click)="onDeleteCancelled()" [disabled]="isDeleting"></button>
+        <button pButton type="button" label="Xóa" class="p-button-danger" (click)="onDeleteConfirmed()" [disabled]="isDeleting">
+            <i class="pi pi-spin pi-spinner" *ngIf="isDeleting"></i>
+        </button>
+    </ng-template>
+</p-dialog>
