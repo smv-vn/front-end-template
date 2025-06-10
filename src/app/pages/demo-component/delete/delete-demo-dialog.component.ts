@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
-import { DemoRecord } from '../../models/demo.model';
+import { DemoRecord } from '../../../models/demo.model';
 
 @Component({    selector: 'app-delete-demo-dialog',
     standalone: true,

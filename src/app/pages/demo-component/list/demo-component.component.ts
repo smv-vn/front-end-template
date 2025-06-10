@@ -13,8 +13,8 @@ import { CalendarModule } from 'primeng/calendar';
 import { CommonModule } from '@angular/common';
 import { MenuItem, MessageService } from 'primeng/api';
 
-import { DemoRecord, StatusOption } from '../../models/demo.model';
-import { DemoService } from '../../services/demo.service';
+import { DemoRecord, StatusOption } from '../../../models/demo.model';
+import { DemoService } from '../../../services/demo.service';
 
 @Component({
     selector: 'app-demo-component',

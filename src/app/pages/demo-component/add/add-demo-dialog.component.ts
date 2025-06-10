@@ -10,8 +10,8 @@ import { CalendarModule } from 'primeng/calendar';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 
-import { DemoRecord, StatusOption } from '../../models/demo.model';
-import { DemoService } from '../../services/demo.service';
+import { DemoRecord, StatusOption } from '../../../models/demo.model';
+import { DemoService } from '../../../services/demo.service';
 
 @Component({
     selector: 'app-add-demo-dialog',
